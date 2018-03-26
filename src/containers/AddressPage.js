@@ -67,7 +67,7 @@ class AddressPage extends Component
             .then(res => res.json())
             .then(
                 (tokenInfo) => {
-                    allTokens.push(this.ETH_asToken(addressInfo, tokenInfo[0]));
+                    allTokens.push(Parser.ETH_asToken(addressInfo, tokenInfo[0]));
                     this.getCryptoCompareInfo(allTokens, addressInfo);
                 },
                 (error) => {
@@ -87,6 +87,7 @@ class AddressPage extends Component
                     allTokens.map(token => {
                         const coinData = allCoins.Data[token.tokenInfo.symbol];
                         token['cryptoCompare'] = coinData === undefined ? false : coinData;
+                        return null;
                     });
                     this.completeMount(allTokens, addressInfo);
                 },
@@ -102,7 +103,7 @@ class AddressPage extends Component
     completeMount(allTokens, addressInfo) {
         const tokens = Sorter.placer(allTokens);
 
-        const {totalWorth, totalDiff, totalDiff7d, hasPrice} = Calc.initCalc(tokens.hasPrice);
+        const {totalWorth, totalDiff, totalWorth24h, totalWorth7d, totalDiff7d, hasPrice} = Calc.initCalc(tokens.hasPrice);
 
         tokens['hasPrice'] = hasPrice;
 
@@ -113,37 +114,14 @@ class AddressPage extends Component
             isLoaded: true,
             addressInfo,
             totalWorth,
+            totalWorth24h,
+            totalWorth7d,
             totalDiff,
             totalDiff7d,
             tokens,
             sorted,
             sortedCache
         });
-    }
-
-    ETH_asToken (addressInfo ,tokenInfo) {
-        return {
-            balance: addressInfo.ETH.balance * Math.pow(10, 18),
-            tokenInfo: {
-                address: "0x",
-                decimals: 18,
-                name: "Ethereum",
-                owner: "0x",
-                price: {
-                    availableSupply: null,
-                    currency: "USD",
-                    diff: parseFloat(tokenInfo.percent_change_24h),
-                    diff7d: parseFloat(tokenInfo.percent_change_7d),
-                    marketCapUsd: tokenInfo.market_cap_usd,
-                    rate: tokenInfo.price_usd,
-                    ts: null,
-                    volume24h: tokenInfo['24h_volume_usd']
-                },
-                symbol: "ETH"
-            },
-            totalIn: addressInfo.ETH.totalIn * Math.pow(10, 18),
-            totalOut: addressInfo.ETH.totalOut * Math.pow(10, 18),
-        }
     }
 
 
@@ -170,7 +148,7 @@ class AddressPage extends Component
 
     render() {
 
-        const { error, isLoaded, totalWorth, totalDiff, totalDiff7d, sorted, tokens } = this.state;
+        const { error, isLoaded, totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d, sorted, tokens } = this.state;
 
 
         if (error) {
@@ -201,18 +179,24 @@ class AddressPage extends Component
                             <th className={"header-worth text-right"}
                                 onClick={() => this.changeOrder('worth', 'ASC')}        >{Parser.worth(totalWorth)}</th>
                             <th className={"header-diff text-right " + Parser.diffColor(totalDiff)}
-                                onClick={() => this.changeOrder('diff', 'ASC')}         >{Parser.diff(totalDiff)}</th>
+                                onClick={() => this.changeOrder('diff', 'ASC')}>
+                                <p>{Parser.diff(totalDiff)}</p>
+                                <p className={'diff-worth'}>{Parser.worth(totalWorth24h)}</p>
+                                </th>
                             <th className={"header-diff7d " + Parser.diffColor(totalDiff7d)}
-                                onClick={() => this.changeOrder('diff7d', 'ASC')}       >{Parser.diff7d(totalDiff7d)}</th>
+                                onClick={() => this.changeOrder('diff7d', 'ASC')}>
+                                <p>{Parser.diff(totalDiff7d)}</p>
+                                <p className={'diff-worth'}>{Parser.worth(totalWorth7d)}</p>
+                                </th>
                             <th className={"header-market text-right"}
                                 onClick={() => this.changeOrder('marketCapUsd', 'ASC')} >Market Cap</th>
                         </tr>
                         </thead>
                         {sorted.map(token => (
-                            <TokenRow key={token.tokenInfo.symbol} token={token} />
+                            <TokenRow key={token.cryptoCompare.id} token={token} />
                         ))}
                         {tokens.noPrice.map(token => (
-                            <TokenRowNoPrice key={token.tokenInfo.symbol} token={token} />
+                            <TokenRowNoPrice key={token.cryptoCompare.id} token={token} />
                         ))}
                     </table>
                 </div>

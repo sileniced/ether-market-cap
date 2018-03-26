@@ -6,7 +6,7 @@ class Parser
     static logo (cryptoCompare)
     {
         if (cryptoCompare !== false) {
-            return <img className={'logo'} src={"https://www.cryptocompare.com" + cryptoCompare.ImageUrl} />
+            return <img alt={cryptoCompare.FullName} className={'logo'} src={"https://www.cryptocompare.com" + cryptoCompare.ImageUrl} />
         }
 
         return <div className={'logo-32'} />
@@ -62,17 +62,38 @@ class Parser
         return diff.toFixed(2) + "%";
     }
 
-    static diff7d (diff7d)
-    {
-        return "(" + diff7d.toFixed(2) + "%)";
-    }
-
     static diffColor (diff)
     {
         let diffScore = Math.floor(Math.abs(diff) / 5);
         if (diffScore > 5) diffScore = 5;
         return (diff < 0 ? 'change-negative-' : 'change-positive-') + diffScore;
     }
+
+    static ETH_asToken (addressInfo ,tokenInfo) {
+        return {
+            balance: addressInfo.ETH.balance * Math.pow(10, 18),
+            tokenInfo: {
+                address: "0x",
+                decimals: 18,
+                name: "Ethereum",
+                owner: "0x",
+                price: {
+                    availableSupply: null,
+                    currency: "USD",
+                    diff: parseFloat(tokenInfo.percent_change_24h),
+                    diff7d: parseFloat(tokenInfo.percent_change_7d),
+                    marketCapUsd: tokenInfo.market_cap_usd,
+                    rate: tokenInfo.price_usd,
+                    ts: null,
+                    volume24h: tokenInfo['24h_volume_usd']
+                },
+                symbol: "ETH"
+            },
+            totalIn: addressInfo.ETH.totalIn * Math.pow(10, 18),
+            totalOut: addressInfo.ETH.totalOut * Math.pow(10, 18),
+        }
+    }
+
 }
 
 export default Parser

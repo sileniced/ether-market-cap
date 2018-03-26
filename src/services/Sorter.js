@@ -25,6 +25,8 @@ class Sorter
 
                 hasPrice.push(token)
             }
+
+            return null;
         });
 
         return { hasPrice, noPrice };
@@ -53,6 +55,8 @@ class Sorter
 
                 }
             }
+
+            return null;
         });
 
         if (order === "ASC") sorted.reverse();
