@@ -21,6 +21,12 @@ class Page extends PureComponent
                     <div className={'address-page-container'}>
                         <AddressPage address={pathname} />
                     </div>
+                    <footer className={'footer'}>
+                        made with:
+                        <a href={'https://ethplorer.io'}>ethplorer</a>
+                        <a href={'https://coinmarketcap.com'}>coinmarketcap</a>
+                        <a href={'https://cryptocompare.com'}>cryptocompare</a>
+                    </footer>
                 </div>
             );
     }

@@ -71,3 +71,11 @@ td, th, tbody {
     width: 20px;
     margin-bottom: 3px;
 }
+
+.footer {
+    text-align: center;
+}
+
+.footer a {
+    margin: 2px;
+}
