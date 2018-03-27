@@ -15,7 +15,7 @@ class Page extends PureComponent
                 </div>
             ) :
             (
-                <div className={'container-fluid'}>
+                <div className={'container'}>
                     <h1 className={'display-4 title'}>Address Page</h1>
                     <p className={'under-title'}>{pathname}</p>
                     <div className={'address-page-container'}>
