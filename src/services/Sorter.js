@@ -1,5 +1,3 @@
-import Calc from "./Calc";
-
 class Sorter
 {
     static placer(tokens) {
@@ -12,7 +10,7 @@ class Sorter
             const { price, decimals } = tokenInfo;
 
             token['sortable'] = {};
-            token['balance'] = Calc.balance(balance, decimals);
+            token['balance'] = balance / Math.pow(10, decimals);
             token['sortable']['balance'] = token.balance;
 
             if (price === false) {

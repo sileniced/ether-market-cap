@@ -4,7 +4,7 @@ class LandingsPage extends Component
 {
     render() {
         return (
-            <h1>Ether Market Cap</h1>
+            <h1>erc20 tracker</h1>
         )
     }
 }

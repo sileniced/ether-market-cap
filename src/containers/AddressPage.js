@@ -192,11 +192,11 @@ class AddressPage extends Component
                                 onClick={() => this.changeOrder('marketCapUsd', 'ASC')} >Market Cap</th>
                         </tr>
                         </thead>
-                        {sorted.map(token => (
-                            <TokenRow key={token.cryptoCompare.id} token={token} />
+                        {sorted.map((token, key) => (
+                            <TokenRow key={key} token={token} />
                         ))}
-                        {tokens.noPrice.map(token => (
-                            <TokenRowNoPrice key={token.cryptoCompare.id} token={token} />
+                        {tokens.noPrice.map((token, key) => (
+                            <TokenRowNoPrice key={key} token={token} />
                         ))}
                     </table>
                 </div>

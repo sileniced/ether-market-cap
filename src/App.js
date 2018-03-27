@@ -12,6 +12,7 @@ class App extends Component {
                     <NavBar />
                     <Route exact path={'/'} component={Page} />
                     <Route exact path={'/:address'} component={Page} />
+                    <Route exact path={'/:address/:currency'} component={Page} />
                 </div>
             </Router>
         );
