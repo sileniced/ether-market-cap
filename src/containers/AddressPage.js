@@ -124,7 +124,6 @@ class AddressPage extends Component
                             };
                             this.completeMount(allTokens, addressInfo, currency);
                         } else {
-                            console.log(error, '3');
                             this.completeMount(allTokens, addressInfo, this.state.currency);
                         }
                     },
