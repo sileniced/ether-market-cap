@@ -7,9 +7,7 @@ class Page extends PureComponent
 {
     render () {
         const address = this.props.match.params.address;
-        const currency = this.props.match.params.currency;
-
-        if (currency !== undefined) currency.toUpperCase();
+        const currency = (this.props.match.params.currency !== undefined) ? this.props.match.params.currency.toUpperCase() : undefined;
 
         return (address === undefined) ?
             (

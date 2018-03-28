@@ -13,7 +13,7 @@ class LandingsPage extends PureComponent
     }
 
     onCurrencyChange (currency) {
-        if (currency !== '') currency = '/' + currency;
+        if (currency !== '') currency = '/' + currency.toUpperCase();
         this.setState({currency})
     }
 
