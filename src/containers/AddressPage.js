@@ -116,11 +116,17 @@ class AddressPage extends Component
                 .then(res => res.json())
                 .then(
                     (value) => {
-                        const currency = {
-                            value: value['USD_' + this.props.currency].val,
-                            symbol: symbols[this.props.currency] || ''
-                        };
-                        this.completeMount(allTokens, addressInfo, currency);
+
+                        if (value['USD_' + this.props.currency].val !== undefined) {
+                            const currency = {
+                                value: value['USD_' + this.props.currency].val,
+                                symbol: symbols[this.props.currency] || ''
+                            };
+                            this.completeMount(allTokens, addressInfo, currency);
+                        } else {
+                            console.log(error, '3');
+                            this.completeMount(allTokens, addressInfo, this.state.currency);
+                        }
                     },
                     (error) => {
                         console.log(error, '1');
