@@ -9,7 +9,7 @@ class Page extends PureComponent
         const address = this.props.match.params.address;
         const currency = this.props.match.params.currency;
 
-        return (address === '') ?
+        return (address === undefined) ?
             (
                 <div className={'container'}>
                     <LandingsPage />
