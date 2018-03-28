@@ -3,6 +3,13 @@ import './DiffColor.css';
 
 class Parser
 {
+
+    static setCurrency(currency)
+    {
+        this.value = parseFloat(currency.value);
+        this.symbol = currency.symbol;
+    }
+
     static logo (cryptoCompare)
     {
         if (cryptoCompare !== false) {
@@ -25,17 +32,17 @@ class Parser
 
     static worth (worth)
     {
-        return "$ " + parseFloat(worth.toFixed(2)).toLocaleString(undefined, {minimumFractionDigits: 2});
+        return this.symbol + " " + parseFloat((worth * this.value).toFixed(2)).toLocaleString(undefined, {minimumFractionDigits: 2});
     }
 
     static rate (rate)
     {
-        return "$ " + parseFloat(rate).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
+        return this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
     }
 
     static marketCapUsd (marketCapUsd)
     {
-        const parsed = parseInt(marketCapUsd, 10);
+        const parsed = parseInt(marketCapUsd, 10) * this.value;
 
         let short = 0;
 
@@ -49,7 +56,7 @@ class Parser
             short = parsed;
         }
 
-        return isNaN(parsed) ? '-' : "$ " + short.toLocaleString();
+        return isNaN(parsed) ? '-' : this.symbol + " " + short.toLocaleString();
     }
 
     static share (share)

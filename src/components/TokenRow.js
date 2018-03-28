@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import Parser from '../services/Parser';
 
-
 class TokenRow extends PureComponent
 {
 
@@ -10,6 +9,8 @@ class TokenRow extends PureComponent
         const { balance, tokenInfo, cryptoCompare } = this.props.token;
         const { name, symbol, price } = tokenInfo;
         const { marketCapUsd, rate, diff, diff7d, share, worth, worth24h, worth7d } = price;
+
+        Parser.setCurrency(this.props.currency);
 
         return (
             <tbody className="table-body">

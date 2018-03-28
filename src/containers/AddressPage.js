@@ -6,6 +6,7 @@ import Parser from '../services/Parser';
 import Sorter from '../services/Sorter';
 import Calc from "../services/Calc";
 
+import { symbols } from '../vendors/Currencies';
 import './AddressPage.css'
 
 class AddressPage extends Component
@@ -23,7 +24,11 @@ class AddressPage extends Component
             tokens: [],
             order: 'worth',
             sorted: [],
-            sortedCache: {}
+            sortedCache: {},
+            currency: {
+                value: 1,
+                symbol: symbols['USD']
+            }
         };
     }
 
@@ -92,7 +97,7 @@ class AddressPage extends Component
                         token['cryptoCompare'] = coinData === undefined ? false : coinData;
                         return null;
                     });
-                    this.completeMount(allTokens, addressInfo);
+                    this.setCurrency(allTokens, addressInfo);
                 },
                 (error) => {
                     this.setState( {
@@ -103,7 +108,52 @@ class AddressPage extends Component
             );
     }
 
-    completeMount(allTokens, addressInfo) {
+    setCurrency(allTokens, addressInfo) {
+        if (this.props.currency === undefined) {
+            this.completeMount(allTokens, addressInfo, this.state.currency);
+        } else {
+            fetch('https://free.currencyconverterapi.com/api/v5/convert?q=USD_' + this.props.currency + '&compact=y')
+                .then(res => res.json())
+                .then(
+                    (value) => {
+                        const currency = {
+                            value: value['USD_' + this.props.currency].val,
+                            symbol: symbols[this.props.currency] || ''
+                        };
+                        this.completeMount(allTokens, addressInfo, currency);
+                    },
+                    (error) => {
+                        console.log(error, '1');
+                        fetch('https://openexchangerates.org/api/latest.json?app_id=b595fe2a7bf543db8278b560b1fda8b9')
+                            .then(res => res.json())
+                            .then(
+                                (value) => {
+
+                                    console.log(value.rates[this.props.currency], this.props.currency);
+
+                                    if (value.rates[this.props.currency] !== undefined) {
+                                        const currency = {
+                                            value: value.rates[this.props.currency],
+                                            symbol: symbols[this.props.currency] || ''
+                                        };
+                                        this.completeMount(allTokens, addressInfo, currency);
+                                    } else {
+                                        console.log(error, '3');
+                                        this.completeMount(allTokens, addressInfo, this.state.currency);
+                                    }
+                                },
+                                (error) => {
+                                    console.log(error, '2');
+                                    this.completeMount(allTokens, addressInfo, this.state.currency);
+                                }
+                            );
+                    }
+                    );
+
+        }
+    }
+
+    completeMount(allTokens, addressInfo, currency) {
         const tokens = Sorter.placer(allTokens);
 
         const {totalWorth, totalDiff, totalWorth24h, totalWorth7d, totalDiff7d, hasPrice} = Calc.initCalc(tokens.hasPrice);
@@ -123,10 +173,10 @@ class AddressPage extends Component
             totalDiff7d,
             tokens,
             sorted,
-            sortedCache
+            sortedCache,
+            currency
         });
     }
-
 
     changeOrder(order) {
         let sortedCache = this.state.sortedCache;
@@ -158,7 +208,8 @@ class AddressPage extends Component
             totalDiff,
             totalDiff7d,
             sorted,
-            tokens
+            tokens,
+            currency
         } = this.state;
 
 
@@ -167,6 +218,8 @@ class AddressPage extends Component
         } else if (!isLoaded) {
             return <div>Loading...</div>;
         } else {
+
+            Parser.setCurrency(currency);
 
             return (
                 <div className="table-responsive">
@@ -207,7 +260,7 @@ class AddressPage extends Component
 
                         </thead>
                         {sorted.map((token, key) => (
-                            <TokenRow key={key} token={token} />
+                            <TokenRow key={key} token={token} currency={currency} />
                         ))}
                         {tokens.noPrice.map((token, key) => (
                             <TokenRowNoPrice key={key} token={token} />

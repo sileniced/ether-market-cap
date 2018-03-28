@@ -9,7 +9,8 @@ class NavBar extends PureComponent
                 <div className={'container'}>
                     <a className="navbar-brand" href="/" >erc20 tracker</a>
                     <form className="form-inline" id="search-form">
-                        <input className="form-control mr-sm-2" id="search-input" type="search" placeholder="address" aria-label="Search" />
+                        <input className="form-control mr-sm-2" id="search-input-address" type="search" placeholder="address" aria-label="Address" />
+                        <input className="form-control mr-sm-2" id="search-input-currency" type="search" placeholder="USD" aria-label="Currency" />
                         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">lookup</button>
                     </form>
                 </div>

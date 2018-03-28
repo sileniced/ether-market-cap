@@ -6,9 +6,10 @@ import AddressPage from '../containers/AddressPage';
 class Page extends PureComponent
 {
     render () {
-        const pathname = this.props.location.pathname.replace('/', '');
+        const address = this.props.match.params.address;
+        const currency = this.props.match.params.currency;
 
-        return (pathname === '') ?
+        return (address === '') ?
             (
                 <div className={'container'}>
                     <LandingsPage />
@@ -17,9 +18,9 @@ class Page extends PureComponent
             (
                 <div className={'container'}>
                     <h1 className={'display-4 title'}>Address Page</h1>
-                    <p className={'under-title'}>{pathname}</p>
+                    <p className={'under-title'}>{address}</p>
                     <div className={'address-page-container'}>
-                        <AddressPage address={pathname} />
+                        <AddressPage address={address} currency={currency} />
                     </div>
                     <footer className={'footer'}>
                         made with:
