@@ -30,7 +30,7 @@ class Sorter
         return { hasPrice, noPrice };
     }
 
-    static sorter(tokens, key, order) {
+    static sorter(tokens, key) {
         const sorted = [];
 
         tokens.map(token => {
@@ -56,8 +56,6 @@ class Sorter
 
             return null;
         });
-
-        if (order === "ASC") sorted.reverse();
 
         return sorted;
     }

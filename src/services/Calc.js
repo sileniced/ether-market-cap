@@ -6,7 +6,7 @@ class Calc
         let totalWorth24h = 0;
         let totalWorth7d = 0;
 
-        hasPrice.map(token => {
+        hasPrice.forEach(token => {
             const { price } = token.tokenInfo;
 
             if (isNaN(price.rate)) price['rate'] = 0;
@@ -17,7 +17,7 @@ class Calc
             return null;
         });
 
-        hasPrice.map(token => {
+        hasPrice.forEach(token => {
 
             const { price } = token.tokenInfo;
             const { worth } = price;

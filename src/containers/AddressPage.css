@@ -1,0 +1,61 @@
+.col-symbol {
+    width: 20px;
+    padding-left: 3px !important;
+}
+
+.col-balance, .header-balance {
+    padding-right: 3px !important;
+}
+
+.col-name {
+    /*width: 100px;*/
+    padding-left: 2px !important;
+}
+
+.col-logo {
+    padding-right: 2px !important;
+    width: 20px;
+}
+
+.col-diff p, .col-diff7d p, .extra-diff p, .extra-diff7d p, .extra-worth p {
+    padding: 0;
+    margin: 0;
+}
+
+.diff-worth {
+    font-size: x-small;
+}
+
+.header-diff, .header-diff7d {
+    width: 7rem;
+}
+
+.logo {
+    width: 20px;
+    margin-bottom: 3px;
+}
+
+td, th, tbody {
+    border-top: 0 !important;
+    vertical-align: middle !important;
+}
+
+/*.extra-worth {*/
+    /*border-bottom: 0 !important;*/
+    /*padding-bottom: 0 !important;*/
+/*}*/
+
+.extra-row {
+    text-decoration: none !important;
+}
+
+.row-extra th {
+    padding-bottom: 0 !important;
+    border: 0 !important;
+    vertical-align: bottom !important;
+    text-decoration: underline;
+}
+
+.row-extra {
+    border-bottom: 2px solid #dee2e6;
+}

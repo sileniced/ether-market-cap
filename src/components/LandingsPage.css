@@ -1,0 +1,29 @@
+.landing-content {
+    width: 100%;
+    text-align: center;
+    font-size: large;
+    margin-top: 70px;
+    padding: 30px;
+}
+
+.landing-form {
+    /*display: inline-block;*/
+    /*width: 100px;*/
+    /*margin-bottom: 20px;*/
+    /*font-size: xx-large;*/
+    /*vertical-align: initial !important;*/
+}
+
+#landing-form-currency {
+    width: 100px;
+}
+
+#landing-form-address {
+    width: 400px;
+}
+
+#landing-form-submit {
+    margin-left: 10px;
+    /*margin-top: 19px;*/
+    width: 120px;
+}

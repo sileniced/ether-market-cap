@@ -6,6 +6,8 @@ import Parser from '../services/Parser';
 import Sorter from '../services/Sorter';
 import Calc from "../services/Calc";
 
+import './AddressPage.css'
+
 class AddressPage extends Component
 {
     constructor(props) {
@@ -19,6 +21,7 @@ class AddressPage extends Component
             totalDiff: 0,
             totalDiff7d: 0,
             tokens: [],
+            order: 'worth',
             sorted: [],
             sortedCache: {}
         };
@@ -107,7 +110,7 @@ class AddressPage extends Component
 
         tokens['hasPrice'] = hasPrice;
 
-        const sorted = Sorter.sorter(tokens.hasPrice, 'worth', 'DESC');
+        const sorted = Sorter.sorter(tokens.hasPrice, 'worth');
         const sortedCache = {worth: sorted};
 
         this.setState( {
@@ -125,30 +128,38 @@ class AddressPage extends Component
     }
 
 
-    changeOrder(key, order) {
-        if (this.state.sortedCache[key] === undefined) {
-            const sorted = Sorter.sorter(this.state.tokens.hasPrice, key, order);
-            let sortedCache = this.state.sortedCache;
-            sortedCache[key] = sorted;
+    changeOrder(order) {
+        let sortedCache = this.state.sortedCache;
+        let sorted = this.state.sorted;
 
-            this.setState({
-                sorted,
-                sortedCache
-            })
-
+        if (this.state.order === order) {
+            sorted.reverse();
+        } else if (this.state.sortedCache[order] === undefined) {
+            sorted = Sorter.sorter(this.state.tokens.hasPrice, order);
+            sortedCache[order] = sorted;
         } else {
-            const sorted = this.state.sortedCache[key];
-            if (order === 'ASC') sorted.reverse();
-
-            this.setState({
-                sorted
-            })
+            sorted = this.state.sortedCache[order];
         }
+
+        this.setState({
+            order,
+            sorted,
+            sortedCache
+        })
     }
 
     render() {
-
-        const { error, isLoaded, totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d, sorted, tokens } = this.state;
+        const {
+            error,
+            isLoaded,
+            totalWorth,
+            totalWorth24h,
+            totalWorth7d,
+            totalDiff,
+            totalDiff7d,
+            sorted,
+            tokens
+        } = this.state;
 
 
         if (error) {
@@ -161,36 +172,39 @@ class AddressPage extends Component
                 <div className="table-responsive">
                     <table className="table">
                         <thead>
-                        <tr>
-                            <th className={"extra-row"} colSpan={6} />
-                            <th className={"extra-worth text-right"}>worth</th>
-                            <th className={"extra-diff text-right"}>24h</th>
-                            <th className={"extra-diff7d"}>(7d)</th>
-                        </tr>
-                        <tr>
-                            <th className={"header-name"} colSpan={2}>Token</th>
-                            <th className={"header-balance text-right"}
-                                onClick={() => this.changeOrder('balance', 'ASC')}      >Balance</th>
+
+                        <tr className={'row-extra'}>
+                            <th colSpan={2} className={"header-name"}                                                       >Token</th>
+                            <th className={"header-balance text-right"}     onClick={() => this.changeOrder('balance')}     >Balance</th>
                             <th />
-                            <th className={"header-share text-right"}
-                                onClick={() => this.changeOrder('worth', 'ASC')}        >Share</th>
-                            <th className={"header-rate text-right"}
-                                onClick={() => this.changeOrder('rate', 'ASC')}         >Rate</th>
-                            <th className={"header-worth text-right"}
-                                onClick={() => this.changeOrder('worth', 'ASC')}        >{Parser.worth(totalWorth)}</th>
-                            <th className={"header-diff text-right " + Parser.diffColor(totalDiff)}
-                                onClick={() => this.changeOrder('diff', 'ASC')}>
-                                <p>{Parser.diff(totalDiff)}</p>
-                                <p className={'diff-worth'}>{Parser.worth(totalWorth24h)}</p>
-                                </th>
-                            <th className={"header-diff7d " + Parser.diffColor(totalDiff7d)}
-                                onClick={() => this.changeOrder('diff7d', 'ASC')}>
-                                <p>{Parser.diff(totalDiff7d)}</p>
-                                <p className={'diff-worth'}>{Parser.worth(totalWorth7d)}</p>
-                                </th>
-                            <th className={"header-market text-right"}
-                                onClick={() => this.changeOrder('marketCapUsd', 'ASC')} >Market Cap</th>
+                            <th className={"header-share text-right"}       onClick={() => this.changeOrder('worth')}       >Share</th>
+                            <th className={"header-rate text-right"}        onClick={() => this.changeOrder('rate')}        >Rate</th>
+                            <th className={"extra-worth text-right"}
+                                onClick={() => this.changeOrder('worth')} >
+
+                                <p>                                             Worth</p>
+                                <p className={'extra-row '}>{                   Parser.worth(totalWorth)}</p>
+
+                            </th>
+                            <th className={"extra-diff text-right " +           Parser.diffColor(totalDiff)}
+                                onClick={() => this.changeOrder('diff')}>
+
+                                <p>                                             24h</p>
+                                <p className={'extra-row '}>{                   Parser.diff(totalDiff)}</p>
+                                <p className={'extra-row diff-worth'}>{         Parser.worth(totalWorth24h)}</p>
+
+                            </th>
+                            <th className={"extra-diff7d " +                    Parser.diffColor(totalDiff7d)}
+                                onClick={() => this.changeOrder('diff7d')}>
+
+                                <p>                                             7d</p>
+                                <p className={'extra-row '}>{                   Parser.diff(totalDiff7d)}</p>
+                                <p className={'extra-row diff-worth'}>{         Parser.worth(totalWorth7d)}</p>
+
+                            </th>
+                            <th className={"header-market text-right"}      onClick={() => this.changeOrder('marketCapUsd')}>Market Cap</th>
                         </tr>
+
                         </thead>
                         {sorted.map((token, key) => (
                             <TokenRow key={key} token={token} />
