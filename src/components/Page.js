@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 
 import LandingsPage from '../components/LandingsPage';
 import AddressPage from '../containers/AddressPage';
 
-class Page extends PureComponent
+class Page extends Component
 {
     render () {
         const address = this.props.match.params.address;

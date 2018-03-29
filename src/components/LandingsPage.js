@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import './LandingsPage.css';
 
-class LandingsPage extends PureComponent
+class LandingsPage extends Component
 {
     constructor() {
         super();

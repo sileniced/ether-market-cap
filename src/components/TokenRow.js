@@ -1,7 +1,7 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import Parser from '../services/Parser';
 
-class TokenRow extends PureComponent
+class TokenRow extends Component
 {
 
     render() {
