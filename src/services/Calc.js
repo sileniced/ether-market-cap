@@ -38,8 +38,9 @@ class Calc
 
         const totalDiff = ((totalWorth / totalWorth24h) * 100) - 100;
         const totalDiff7d = ((totalWorth / totalWorth7d) * 100) - 100;
+        const total = { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d };
 
-        return { totalWorth, totalWorth24h, totalWorth7d, hasPrice, totalDiff, totalDiff7d }
+        return { total, hasPrice }
     }
 }
 

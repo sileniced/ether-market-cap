@@ -6,6 +6,8 @@ import Parser from '../services/Parser';
 import Sorter from '../services/Sorter';
 import Calc from "../services/Calc";
 
+import * as Request from 'superagent'
+
 import { symbols } from '../vendors/Currencies';
 import './AddressPage.css'
 
@@ -18,9 +20,7 @@ class AddressPage extends Component
             error: null,
             isLoaded: false,
             addressInfo: {},
-            totalWorth: 0,
-            totalDiff: 0,
-            totalDiff7d: 0,
+            total: {},
             tokens: [],
             order: 'worth',
             sorted: [],
@@ -33,154 +33,81 @@ class AddressPage extends Component
     }
 
     // componentDidMount() {
-    //     Promise.all([
-    //         fetch('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey'),
-    //         fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/'),
-    //         fetch('https://min-api.cryptocompare.com/data/all/coinlist')
-    //     ])
-    //         .then(([addressInfo, tokeninfo, allCoins]) => console.log([addressInfo, tokeninfo, allCoins]))
-    //         .catch(err => console.log(err))
+    //     let addressInfo = {};
+    //     Request.get('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey')
+    //         .then(res => addressInfo = res.body)
+    //         .catch(err => console.log(err));
+    //
+    //     console.log(addressInfo);
     // }
 
     componentDidMount() {
-        fetch('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey')
-            .then(res => res.json())
-            .then(
-                (addressInfo) => {
 
-                    if (addressInfo.error === undefined) {
+        const hasCurreny = this.props.currency === undefined;
 
-                        let allTokens = addressInfo.tokens;
-                        this.getEtherInfo(allTokens, addressInfo);
+        const requests = Promise.all([
+            Request.get('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey'),
+            Request.get('https://api.coinmarketcap.com/v1/ticker/ethereum/'),
+            Request.get('https://min-api.cryptocompare.com/data/all/coinlist'),
+            hasCurreny ? {} : Request.get('https://free.currencyconverterapi.com/api/v5/convert?q=USD_' + this.props.currency + '&compact=y')
+        ]);
 
-                    } else {
-                        const { error } = addressInfo;
-                        this.setState({
-                            isLoaded: true,
-                            error
-                        });
-                    }
-                },
-                (error) => {
-                    this.setState({
-                        isLoaded: true,
-                        error
-                    });
-                }
-            )
-    }
+        const getBody = ([addressInfo, tokenInfo, allCoins, currency]) => [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, currency.body];
 
-    getEtherInfo(allTokens, addressInfo) {
-        fetch('https://api.coinmarketcap.com/v1/ticker/ethereum/')
-            .then(res => res.json())
-            .then(
-                (tokenInfo) => {
-                    allTokens.push(Parser.ETH_asToken(addressInfo, tokenInfo[0]));
-                    this.getCryptoCompareInfo(allTokens, addressInfo);
-                },
-                (error) => {
-                    this.setState( {
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
-    }
+        const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) => {
 
-    getCryptoCompareInfo(allTokens, addressInfo) {
-        fetch('https://min-api.cryptocompare.com/data/all/coinlist')
-            .then(res => res.json())
-            .then(
-                (allCoins) => {
-                    allTokens.map(token => {
-                        const coinData = allCoins.Data[token.tokenInfo.symbol];
-                        token['cryptoCompare'] = coinData === undefined ? false : coinData;
-                        return null;
-                    });
-                    this.setCurrency(allTokens, addressInfo);
-                },
-                (error) => {
-                    this.setState( {
-                        isLoaded: true,
-                        error
-                    });
-                }
-            );
-    }
+            if (addressInfo.error !== undefined) {
+                this.setState({
+                    isLoaded: true,
+                    error: { message: "this address is incomplete or it isn't an Ethereum address." }
+                });
+                return null;
+            }
 
-    setCurrency(allTokens, addressInfo) {
-        if (this.props.currency === undefined) {
-            this.completeMount(allTokens, addressInfo, this.state.currency);
-        } else {
-            fetch('https://free.currencyconverterapi.com/api/v5/convert?q=USD_' + this.props.currency + '&compact=y')
-                .then(res => res.json())
-                .then(
-                    (value) => {
+            if (Object.keys(currency).length === 0) {
+                this.setState({
+                    isLoaded: true,
+                    error: { message: "The currency is unknown or not found, it might contain a typing error." }
+                });
 
-                        if (value['USD_' + this.props.currency].val !== undefined) {
-                            const currency = {
-                                value: value['USD_' + this.props.currency].val,
-                                symbol: symbols[this.props.currency] || ''
-                            };
-                            this.completeMount(allTokens, addressInfo, currency);
-                        } else {
-                            this.completeMount(allTokens, addressInfo, this.state.currency);
-                        }
-                    },
-                    (error) => {
-                        console.log(error, '1');
-                        fetch('https://openexchangerates.org/api/latest.json?app_id=b595fe2a7bf543db8278b560b1fda8b9')
-                            .then(res => res.json())
-                            .then(
-                                (value) => {
+            } else if (currency !== undefined) {
+                 currency = {
+                    value: currency['USD_' + this.props.currency].val,
+                    symbol: symbols[this.props.currency] || ''
+                };
+            }
 
-                                    console.log(value.rates[this.props.currency], this.props.currency);
 
-                                    if (value.rates[this.props.currency] !== undefined) {
-                                        const currency = {
-                                            value: value.rates[this.props.currency],
-                                            symbol: symbols[this.props.currency] || ''
-                                        };
-                                        this.completeMount(allTokens, addressInfo, currency);
-                                    } else {
-                                        console.log(error, '3');
-                                        this.completeMount(allTokens, addressInfo, this.state.currency);
-                                    }
-                                },
-                                (error) => {
-                                    console.log(error, '2');
-                                    this.completeMount(allTokens, addressInfo, this.state.currency);
-                                }
-                            );
-                    }
-                    );
+            let tokens = (addressInfo.tokens).concat(Parser.ETH_asToken(addressInfo, tokenInfo));
 
-        }
-    }
+            tokens.forEach(token => {
+                token['cryptoCompare'] = allCoins[token.tokenInfo.symbol] || false;
+                return null;
+            });
 
-    completeMount(allTokens, addressInfo, currency) {
-        const tokens = Sorter.placer(allTokens);
+            tokens = Sorter.placer(tokens);
 
-        const {totalWorth, totalDiff, totalWorth24h, totalWorth7d, totalDiff7d, hasPrice} = Calc.initCalc(tokens.hasPrice);
+            const { total, hasPrice } = Calc.initCalc(tokens.hasPrice);
 
-        tokens['hasPrice'] = hasPrice;
+            tokens['hasPrice'] = hasPrice;
 
-        const sorted = Sorter.sorter(tokens.hasPrice, 'worth');
-        const sortedCache = {worth: sorted};
+            const sorted = Sorter.sorter(tokens.hasPrice, 'worth');
+            const sortedCache = {worth: sorted};
 
-        this.setState( {
-            isLoaded: true,
-            addressInfo,
-            totalWorth,
-            totalWorth24h,
-            totalWorth7d,
-            totalDiff,
-            totalDiff7d,
-            tokens,
-            sorted,
-            sortedCache,
-            currency
-        });
+            this.setState({
+                isLoaded: true,
+                addressInfo,
+                total,
+                tokens,
+                sorted,
+                sortedCache,
+                currency
+            });
+
+            console.log([addressInfo, tokenInfo, allCoins, currency], tokens);
+        };
+
+        requests.then(getBody).then(parseResult).catch(([addressInfo, tokenInfo, allCoins, currency]) => console.log([addressInfo, tokenInfo, allCoins, currency]))
     }
 
     changeOrder(order) {
@@ -204,19 +131,8 @@ class AddressPage extends Component
     }
 
     render() {
-        const {
-            error,
-            isLoaded,
-            totalWorth,
-            totalWorth24h,
-            totalWorth7d,
-            totalDiff,
-            totalDiff7d,
-            sorted,
-            tokens,
-            currency
-        } = this.state;
-
+        const { error, isLoaded, total, sorted, tokens, currency } = this.state;
+        const { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
 
         if (error) {
             return <div>Error: {error.message}</div>;
