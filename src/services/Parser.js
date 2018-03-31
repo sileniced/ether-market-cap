@@ -16,7 +16,7 @@ class Parser
             return <img alt={cryptoCompare.FullName} className={'logo'} src={"https://www.cryptocompare.com" + cryptoCompare.ImageUrl} />
         }
 
-        return <div className={'logo-32'} />
+        return <div className={'logo'} />
     }
 
     static name (name)
@@ -46,12 +46,16 @@ class Parser
 
         let short = 0;
 
-        if ( parsed > Math.pow(10, 9) ) {
+        if ( parsed > Math.pow(10, 9) )
+        {
             short = (parsed / Math.pow(10, 9)).toLocaleString(undefined, {minimumFractionDigits: 3}) + " Bn";
+
         } else if ( parsed > Math.pow(10, 6) ) {
             short = (parsed / Math.pow(10, 6)).toLocaleString(undefined, {minimumFractionDigits: 3}) + " MM";
+
         } else if ( parsed > Math.pow(10, 3) ) {
             short = (parsed / Math.pow(10, 3)).toLocaleString(undefined, {minimumFractionDigits: 3}) + " K";
+
         } else {
             short = parsed;
         }

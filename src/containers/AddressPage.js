@@ -16,71 +16,77 @@ class AddressPage extends Component
     constructor(props) {
         super(props);
 
+        this.hasCurreny = props.currency !== undefined;
+
+        this.requests = Promise.all([
+            Request.get('https://api.ethplorer.io/getAddressInfo/' + props.address + '?apiKey=freekey'),
+            Request.get('https://api.coinmarketcap.com/v1/ticker/ethereum/'),
+            Request.get('https://min-api.cryptocompare.com/data/all/coinlist'),
+            this.hasCurreny ? Request.get('https://free.currencyconverterapi.com/api/v5/convert?q=USD_' + props.currency + '&compact=y') : {}
+        ]);
+
         this.state = {
             error: null,
             isLoaded: false,
-            addressInfo: {},
             total: {},
             tokens: [],
             order: 'worth',
             sorted: [],
             sortedCache: {},
-            currency: {
-                value: 1,
-                symbol: symbols['USD']
-            }
+            currency: {}
         };
     }
 
-    // componentDidMount() {
-    //     let addressInfo = {};
-    //     Request.get('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey')
-    //         .then(res => addressInfo = res.body)
-    //         .catch(err => console.log(err));
-    //
-    //     console.log(addressInfo);
-    // }
-
     componentDidMount() {
 
-        const hasCurreny = this.props.currency === undefined;
+        const getBody = ([addressInfo, tokenInfo, allCoins, currency]) =>
+            [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, this.hasCurreny ? currency.body : currency ];
+        const getError = ([addressInfo, tokenInfo, allCoins, currency]) =>
+            console.log([addressInfo, tokenInfo, allCoins, currency ]);
+        const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) =>
+        {
 
-        const requests = Promise.all([
-            Request.get('https://api.ethplorer.io/getAddressInfo/' + this.props.address + '?apiKey=freekey'),
-            Request.get('https://api.coinmarketcap.com/v1/ticker/ethereum/'),
-            Request.get('https://min-api.cryptocompare.com/data/all/coinlist'),
-            hasCurreny ? {} : Request.get('https://free.currencyconverterapi.com/api/v5/convert?q=USD_' + this.props.currency + '&compact=y')
-        ]);
-
-        const getBody = ([addressInfo, tokenInfo, allCoins, currency]) => [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, currency.body];
-
-        const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) => {
-
-            if (addressInfo.error !== undefined) {
+            if (addressInfo.error !== undefined)
+            {
                 this.setState({
                     isLoaded: true,
-                    error: { message: "this address is incomplete or it isn't an Ethereum address." }
+                    error: {
+                        type: "address",
+                        message: "this address is incomplete or it isn't an Ethereum address."
+                    }
                 });
                 return null;
             }
 
-            if (Object.keys(currency).length === 0) {
-                this.setState({
-                    isLoaded: true,
-                    error: { message: "The currency is unknown or not found, it might contain a typing error." }
-                });
 
-            } else if (currency !== undefined) {
-                 currency = {
+            if (this.hasCurreny)
+            {
+                if (Object.keys(currency).length === 0) {
+                    this.setState({
+                        isLoaded: true,
+                        error: {
+                            type: "currency",
+                            message: "The currency is unknown or not found, it might contain a typing error."
+                        }
+                    });
+                    return null;
+                }
+                currency = {
                     value: currency['USD_' + this.props.currency].val,
                     symbol: symbols[this.props.currency] || ''
                 };
+            } else {
+                currency = {
+                    value: 1,
+                    symbol: symbols['USD']
+                }
             }
 
 
             let tokens = (addressInfo.tokens).concat(Parser.ETH_asToken(addressInfo, tokenInfo));
 
-            tokens.forEach(token => {
+            tokens.forEach(token =>
+            {
                 token['cryptoCompare'] = allCoins[token.tokenInfo.symbol] || false;
                 return null;
             });
@@ -92,7 +98,7 @@ class AddressPage extends Component
             tokens['hasPrice'] = hasPrice;
 
             const sorted = Sorter.sorter(tokens.hasPrice, 'worth');
-            const sortedCache = {worth: sorted};
+            const sortedCache = { worth: sorted };
 
             this.setState({
                 isLoaded: true,
@@ -103,11 +109,12 @@ class AddressPage extends Component
                 sortedCache,
                 currency
             });
-
-            console.log([addressInfo, tokenInfo, allCoins, currency], tokens);
         };
 
-        requests.then(getBody).then(parseResult).catch(([addressInfo, tokenInfo, allCoins, currency]) => console.log([addressInfo, tokenInfo, allCoins, currency]))
+        this.requests
+            .then(getBody)
+            .then(parseResult)
+            .catch(getError)
     }
 
     changeOrder(order) {
@@ -134,49 +141,54 @@ class AddressPage extends Component
         const { error, isLoaded, total, sorted, tokens, currency } = this.state;
         const { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
 
+        const co = (key) => () => this.changeOrder(key);
+
         if (error) {
-            return <div>Error: {error.message}</div>;
+            return <div className={'table-replace'}>Error: {error.message}</div>;
         } else if (!isLoaded) {
-            return <div>Loading...</div>;
+            return <div className={'table-replace'}>Loading...</div>;
         } else {
 
             Parser.setCurrency(currency);
+
+            const c = {
+                na: 'header-name',
+                ba: 'header-balance text-right',
+                sh: 'header-share text-right',
+                ra: 'header-rate text-right',
+                wo: 'extra-worth text-right',
+                di: `extra-diff text-right ${Parser.diffColor(totalDiff)}`,
+                d7: `extra-diff7d ${Parser.diffColor(totalDiff7d)}`,
+                ma: 'header-market text-right'
+            };
+
 
             return (
                 <div className="table-responsive">
                     <table className="table">
                         <thead>
 
-                        <tr className={'row-extra'}>
-                            <th colSpan={2} className={"header-name"}                                                       >Token</th>
-                            <th className={"header-balance text-right"}     onClick={() => this.changeOrder('balance')}     >Balance</th>
+                        <tr className={'row-header'}>
+                            <th className={c.na} colSpan={2}>Token</th>
+                            <th className={c.ba} onClick={co('balance')}>Balance</th>
                             <th />
-                            <th className={"header-share text-right"}       onClick={() => this.changeOrder('worth')}       >Share</th>
-                            <th className={"header-rate text-right"}        onClick={() => this.changeOrder('rate')}        >Rate</th>
-                            <th className={"extra-worth text-right"}
-                                onClick={() => this.changeOrder('worth')} >
-
-                                <p>                                             Worth</p>
-                                <p className={'extra-row '}>{                   Parser.worth(totalWorth)}</p>
-
+                            <th className={c.sh} onClick={co('worth')}>Share</th>
+                            <th className={c.ra} onClick={co('rate')}>Rate</th>
+                            <th className={c.wo} onClick={co('worth')} >
+                                <p>Worth</p>
+                                <p className={'extra-row'}>{Parser.worth(totalWorth)}</p>
                             </th>
-                            <th className={"extra-diff text-right " +           Parser.diffColor(totalDiff)}
-                                onClick={() => this.changeOrder('diff')}>
-
-                                <p>                                             24h</p>
-                                <p className={'extra-row '}>{                   Parser.diff(totalDiff)}</p>
-                                <p className={'extra-row diff-worth'}>{         Parser.worth(totalWorth24h)}</p>
-
+                            <th className={c.di} onClick={co('diff')}>
+                                <p>24h</p>
+                                <p className={'extra-row'}>{Parser.diff(totalDiff)}</p>
+                                <p className={'extra-row diff-worth'}>{Parser.worth(totalWorth24h)}</p>
                             </th>
-                            <th className={"extra-diff7d " +                    Parser.diffColor(totalDiff7d)}
-                                onClick={() => this.changeOrder('diff7d')}>
-
-                                <p>                                             7d</p>
-                                <p className={'extra-row '}>{                   Parser.diff(totalDiff7d)}</p>
-                                <p className={'extra-row diff-worth'}>{         Parser.worth(totalWorth7d)}</p>
-
+                            <th className={c.d7} onClick={co('diff7d')}>
+                                <p>7d</p>
+                                <p className={'extra-row'}>{Parser.diff(totalDiff7d)}</p>
+                                <p className={'extra-row diff-worth'}>{Parser.worth(totalWorth7d)}</p>
                             </th>
-                            <th className={"header-market text-right"}      onClick={() => this.changeOrder('marketCapUsd')}>Market Cap</th>
+                            <th className={c.ma} onClick={co('marketCapUsd')}>Market Cap</th>
                         </tr>
 
                         </thead>

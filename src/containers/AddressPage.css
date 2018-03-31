@@ -49,13 +49,19 @@ td, th, tbody {
     text-decoration: none !important;
 }
 
-.row-extra th {
+.row-header th {
     padding-bottom: 0 !important;
     border: 0 !important;
     vertical-align: bottom !important;
     text-decoration: underline;
 }
 
-.row-extra {
+.row-header {
     border-bottom: 2px solid #dee2e6;
+}
+
+.table-replace {
+    padding: 20px;
+    font-size: x-large;
+    text-align: center;
 }
