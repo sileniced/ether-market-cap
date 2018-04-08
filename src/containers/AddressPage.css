@@ -54,6 +54,11 @@ td, th, tbody {
     border: 0 !important;
     vertical-align: bottom !important;
     text-decoration: underline;
+    cursor: pointer;
+}
+
+.row-header .header-name {
+    cursor: default;
 }
 
 .row-header {
@@ -64,4 +69,17 @@ td, th, tbody {
     padding: 20px;
     font-size: x-large;
     text-align: center;
+}
+
+.table-row-hidden {
+    overflow: hidden;
+    border-collapse: collapse;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+
+.table-row-hidden-wrapper {
+    margin: 2rem;
+    padding: 2rem;
 }

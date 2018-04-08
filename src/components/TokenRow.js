@@ -32,6 +32,15 @@ class TokenRow extends Component
                 </td>
                 <td className={"col-market text-right"}     >{Parser.marketCapUsd(marketCapUsd)}</td>
             </tr>
+            <tr>
+                <td className="table-row-hidden" colSpan={10}>
+                     <div className="collapse">
+                         <div className="row table-row-hidden-wrapper shadow-border">
+                             haha
+                         </div>
+                    </div>
+                </td>
+            </tr>
             </tbody>
         )
     }

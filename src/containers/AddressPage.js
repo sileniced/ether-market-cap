@@ -39,8 +39,11 @@ class AddressPage extends Component
 
     componentDidMount() {
 
-        const getBody = ([addressInfo, tokenInfo, allCoins, currency]) =>
-            [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, this.hasCurreny ? currency.body : currency ];
+        const getBody = ([addressInfo, tokenInfo, allCoins, currency]) => {
+            // console.log([addressInfo, tokenInfo, allCoins, currency]);
+            return [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, this.hasCurreny ? currency.body : currency];
+
+        };
         const getError = ([addressInfo, tokenInfo, allCoins, currency]) =>
             console.log([addressInfo, tokenInfo, allCoins, currency ]);
         const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) =>
@@ -162,7 +165,6 @@ class AddressPage extends Component
                 ma: 'header-market text-right'
             };
 
-
             return (
                 <div className="table-responsive">
                     <table className="table">
@@ -171,7 +173,7 @@ class AddressPage extends Component
                         <tr className={'row-header'}>
                             <th className={c.na} colSpan={2}>Token</th>
                             <th className={c.ba} onClick={co('balance')}>Balance</th>
-                            <th />
+                            <th onClick={co('balance')} />
                             <th className={c.sh} onClick={co('worth')}>Share</th>
                             <th className={c.ra} onClick={co('rate')}>Rate</th>
                             <th className={c.wo} onClick={co('worth')} >

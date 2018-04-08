@@ -1,54 +1,91 @@
-.change-negative-5 {
+.change-negative-9 {
+    background-color: rgba(244, 67, 54, 1);
+    color: whitesmoke;
+}
+
+.change-negative-8 {
+    background-color: rgba(244, 67, 54, 0.9);
+    color: whitesmoke;
+}
+
+.change-negative-7 {
     background-color: rgba(244, 67, 54, 0.8);
     color: whitesmoke;
 }
 
-.change-negative-4 {
+.change-negative-6 {
     background-color: rgba(244, 67, 54, 0.7);
     color: whitesmoke;
 }
 
-.change-negative-3 {
+.change-negative-5 {
     background-color: rgba(244, 67, 54, 0.6);
     color: whitesmoke;
 }
 
-.change-negative-2 {
+.change-negative-4 {
+    background-color: rgba(244, 67, 54, 0.5);
+    color: whitesmoke;
+}
+
+.change-negative-3 {
     background-color: rgba(244, 67, 54, 0.4);
 }
 
-.change-negative-1 {
+.change-negative-2 {
     background-color: rgba(244, 67, 54, 0.3);
 }
 
-.change-negative-0 {
+.change-negative-1 {
     background-color: rgba(244, 67, 54, 0.2);
 }
 
-.change-positive-5 {
+.change-negative-0 {
+    background-color: rgba(244, 67, 54, 0.1);
+}
+
+.change-positive-9 {
+    background-color: rgba(76, 175, 80, 1);
+    color: whitesmoke;
+}
+
+.change-positive-8 {
+    background-color: rgba(76, 175, 80, 0.9);
+    color: whitesmoke;
+}
+
+.change-positive-7 {
     background-color: rgba(76, 175, 80, 0.8);
     color: whitesmoke;
 }
 
-.change-positive-4 {
+.change-positive-6 {
     background-color: rgba(76, 175, 80, 0.7);
     color: whitesmoke;
 }
 
-.change-positive-3 {
+.change-positive-5 {
     background-color: rgba(76, 175, 80, 0.6);
     color: whitesmoke;
 }
 
-.change-positive-2 {
+.change-positive-4 {
+    background-color: rgba(76, 175, 80, 0.5);
+}
+
+.change-positive-3 {
     background-color: rgba(76, 175, 80, 0.4);
 }
 
-.change-positive-1 {
+.change-positive-2 {
     background-color: rgba(76, 175, 80, 0.3);
 }
 
-.change-positive-0 {
+.change-positive-1 {
     background-color: rgba(76, 175, 80, 0.2);
+}
+
+.change-positive-0 {
+    background-color: rgba(76, 175, 80, 0.1);
 }
 

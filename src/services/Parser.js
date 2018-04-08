@@ -75,8 +75,8 @@ class Parser
 
     static diffColor (diff)
     {
-        let diffScore = Math.floor(Math.abs(diff) / 5);
-        if (diffScore > 5) diffScore = 5;
+        let diffScore = Math.floor(Math.abs(diff) / 10);
+        if (diffScore > 9) diffScore = 9;
         return (diff < 0 ? 'change-negative-' : 'change-positive-') + diffScore;
     }
 
