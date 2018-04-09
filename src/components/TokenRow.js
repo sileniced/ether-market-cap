@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
 import Parser from '../services/Parser';
+import './TokenRow.css';
+import HiddenRow from './HiddenRow';
 
 class TokenRow extends Component
 {
+
+    constructor () {
+        super();
+        this.state = {
+            isHidden: true
+        }
+    }
+
+    toggleHidden = () => {
+        this.setState({
+            isHidden: !this.state.isHidden
+        })
+    };
 
     render() {
 
@@ -13,8 +28,8 @@ class TokenRow extends Component
         Parser.setCurrency(this.props.currency);
 
         return (
-            <tbody className="table-body">
-            <tr>
+            <tbody>
+            <tr className="table-body" onClick={this.toggleHidden.bind(this)} >
                 <td className={"col-logo"}                  >{Parser.logo(cryptoCompare)}</td>
                 <td className={"col-name"}                  >{Parser.name(name)}</td>
                 <td className={"col-balance text-right"}    >{Parser.balance(balance)}</td>
@@ -22,25 +37,17 @@ class TokenRow extends Component
                 <td className={"col-share text-right"}      >{Parser.share(share)}</td>
                 <td className={"col-rate text-right"}       >{Parser.rate(rate)}</td>
                 <td className={"col-worth text-right"}      >{Parser.worth(worth)}</td>
-                <td className={"col-diff text-right " + Parser.diffColor(diff)}>
+                <td className={"col-diff text-right " +       Parser.diffColor(diff)}>
                     <p>{Parser.diff(diff)}</p>
-                    <p className={'diff-worth'}>{Parser.worth(worth24h)}</p>
+                    <p className={'diff-worth'}>             {Parser.worth(worth24h)}</p>
                 </td>
-                <td className={"col-diff7d " + Parser.diffColor(diff7d)}>
+                <td className={"col-diff7d " +                Parser.diffColor(diff7d)}>
                     <p>{Parser.diff(diff7d)}</p>
-                    <p className={'diff-worth'}>{Parser.worth(worth7d)}</p>
+                    <p className={'diff-worth'}>             {Parser.worth(worth7d)}</p>
                 </td>
                 <td className={"col-market text-right"}     >{Parser.marketCapUsd(marketCapUsd)}</td>
             </tr>
-            <tr>
-                <td className="table-row-hidden" colSpan={10}>
-                     <div className="collapse">
-                         <div className="row table-row-hidden-wrapper shadow-border">
-                             haha
-                         </div>
-                    </div>
-                </td>
-            </tr>
+            {!this.state.isHidden && <HiddenRow token={this.props.token}/>}
             </tbody>
         )
     }

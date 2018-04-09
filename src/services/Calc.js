@@ -7,12 +7,16 @@ class Calc
         let totalWorth7d = 0;
 
         hasPrice.forEach(token => {
-            const { price } = token.tokenInfo;
+            const { balance, tokenInfo, cryptoCompare } = token;
+            const { price } = tokenInfo;
+            const { TotalCoinSupply } = cryptoCompare;
 
             if (isNaN(price.rate)) price['rate'] = 0;
             price['worth'] = price.rate * token.balance;
             token['sortable']['worth'] = price.worth;
             totalWorth += price.worth;
+
+            token['userShare'] = balance / TotalCoinSupply;
 
             return null;
         });

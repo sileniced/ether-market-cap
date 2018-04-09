@@ -120,37 +120,36 @@ class AddressPage extends Component
             .catch(getError)
     }
 
-    changeOrder(order) {
-        let sortedCache = this.state.sortedCache;
-        let sorted = this.state.sorted;
+    changeOrder = (order) => {
+        const sortedCache = {...this.state.sortedCache};
+        let sorted = [...this.state.sorted];
 
         if (this.state.order === order) {
             sorted.reverse();
-        } else if (this.state.sortedCache[order] === undefined) {
+        } else if (sortedCache[order] !== undefined) {
+            sorted = sortedCache[order];
+        } else {
             sorted = Sorter.sorter(this.state.tokens.hasPrice, order);
             sortedCache[order] = sorted;
-        } else {
-            sorted = this.state.sortedCache[order];
         }
 
-        this.setState({
+        return {
             order,
             sorted,
             sortedCache
-        })
-    }
+        };
+    };
 
     render() {
-        const { error, isLoaded, total, sorted, tokens, currency } = this.state;
-        const { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
 
-        const co = (key) => () => this.changeOrder(key);
+        // console.log(this.state)
 
-        if (error) {
-            return <div className={'table-replace'}>Error: {error.message}</div>;
-        } else if (!isLoaded) {
-            return <div className={'table-replace'}>Loading...</div>;
-        } else {
+        const { error, isLoaded } = this.state;
+        if (!error && isLoaded) {
+
+            const { total, sorted, tokens, currency } = this.state;
+            const { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
+            const co = (key) => () => this.setState(this.changeOrder(key));
 
             Parser.setCurrency(currency);
 
@@ -173,10 +172,10 @@ class AddressPage extends Component
                         <tr className={'row-header'}>
                             <th className={c.na} colSpan={2}>Token</th>
                             <th className={c.ba} onClick={co('balance')}>Balance</th>
-                            <th onClick={co('balance')} />
+                            <th onClick={co('balance')}/>
                             <th className={c.sh} onClick={co('worth')}>Share</th>
                             <th className={c.ra} onClick={co('rate')}>Rate</th>
-                            <th className={c.wo} onClick={co('worth')} >
+                            <th className={c.wo} onClick={co('worth')}>
                                 <p>Worth</p>
                                 <p className={'extra-row'}>{Parser.worth(totalWorth)}</p>
                             </th>
@@ -194,16 +193,20 @@ class AddressPage extends Component
                         </tr>
 
                         </thead>
-                        {sorted.map((token, key) => (
-                            <TokenRow key={key} token={token} currency={currency} />
+                        {sorted.map((token) => (
+                            <TokenRow key={token.key} token={token} currency={currency}/>
                         ))}
                         {tokens.noPrice.map((token, key) => (
-                            <TokenRowNoPrice key={key} token={token} />
+                            <TokenRowNoPrice key={key} token={token}/>
                         ))}
                     </table>
                 </div>
             );
+        } else {
+            if (!isLoaded) return <div className={'table-replace'}>Loading...</div>;
+            if (error) return <div className={'table-replace'}>Error: {error.message}</div>;
         }
+
     }
 }
 

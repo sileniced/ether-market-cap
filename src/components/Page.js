@@ -29,7 +29,8 @@ class Page extends Component
                         <a href={'https://cryptocompare.com'}>cryptocompare</a>
                     </footer>
                 </div>
-            );
+            )
+        ;
     }
 }
 

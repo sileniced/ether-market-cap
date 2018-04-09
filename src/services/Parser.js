@@ -10,19 +10,20 @@ class Parser
         this.symbol = currency.symbol;
     }
 
-    static logo (cryptoCompare)
+    static logo (cryptoCompare, location)
     {
+        const size = location === 'hidden-row' ? 40 : 20;
+
         if (cryptoCompare !== false) {
-            return <img alt={cryptoCompare.FullName} className={'logo'} src={"https://www.cryptocompare.com" + cryptoCompare.ImageUrl} />
+            return <img alt={cryptoCompare.FullName} className={'logo' + size} src={"https://www.cryptocompare.com" + cryptoCompare.ImageUrl} />
         }
 
-        return <div className={'logo'} />
+        return <div className={'logo' + size} />
     }
 
     static name (name)
     {
         return name
-
     }
 
     static balance (balance)
@@ -78,6 +79,16 @@ class Parser
         let diffScore = Math.floor(Math.abs(diff) / 10);
         if (diffScore > 9) diffScore = 9;
         return (diff < 0 ? 'change-negative-' : 'change-positive-') + diffScore;
+    }
+
+    static TotalCoinSupply(TotalCoinSupply)
+    {
+        return parseInt(TotalCoinSupply, 10).toLocaleString();
+    }
+
+    static userShare(userShare)
+    {
+        return (userShare * 100).toLocaleString(undefined, { minimumFractionDigits: 8 }) + '%';
     }
 
     static ETH_asToken (addressInfo ,tokenInfo) {

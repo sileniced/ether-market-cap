@@ -30,11 +30,6 @@
     width: 7rem;
 }
 
-.logo {
-    width: 20px;
-    margin-bottom: 3px;
-}
-
 td, th, tbody {
     border-top: 0 !important;
     vertical-align: middle !important;
@@ -69,17 +64,4 @@ td, th, tbody {
     padding: 20px;
     font-size: x-large;
     text-align: center;
-}
-
-.table-row-hidden {
-    overflow: hidden;
-    border-collapse: collapse;
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-
-.table-row-hidden-wrapper {
-    margin: 2rem;
-    padding: 2rem;
 }

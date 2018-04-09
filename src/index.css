@@ -33,3 +33,10 @@ h1 {
 .footer a {
     margin: 2px;
 }
+
+.github-ribbon {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 0;
+}

@@ -11,16 +11,24 @@ class NavBar extends Component
         };
     }
 
-    onCurrencyChange (currency) {
+    onCurrencyChange = (currency) => {
         if (currency !== '') currency = '/' + currency.toUpperCase();
         this.setState({currency})
-    }
+    };
 
     render ()
     {
+
+        const GithubRibbon = () => (
+            <a href="https://github.com/sileniced/ether-market-cap">
+                <img className={'github-ribbon'} src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" />
+            </a>
+        );
+
         const { address, currency } = this.state;
         return (
             <nav className="navbar fixed-top navbar-dark bg-dark justify-content-between">
+                <GithubRibbon/>
                 <div className={'container'}>
                     <a className="navbar-brand" href="/" >erc20 tracker</a>
                     <form className="form-inline" id="search-form" action={ address + currency } >

@@ -1,17 +1,27 @@
 class Sorter
 {
+
     static placer(tokens) {
         let hasPrice = [];
         let noPrice = [];
+        let key = [];
 
         tokens.map(token => {
 
             const { balance, tokenInfo } = token;
-            const { price, decimals } = tokenInfo;
+            const { price, decimals, symbol } = tokenInfo;
 
             token['sortable'] = {};
             token['balance'] = balance / Math.pow(10, decimals);
             token['sortable']['balance'] = token.balance;
+
+            let keySlug = null;
+            while (key[symbol + keySlug] !== undefined) {
+                if (keySlug === null) keySlug = 0;
+                else keySlug++;
+            }
+            key[symbol + keySlug] = true;
+            token['key'] = symbol + keySlug;
 
             if (price === false) {
                 noPrice.push(token);
