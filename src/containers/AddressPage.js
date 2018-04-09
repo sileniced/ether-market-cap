@@ -194,10 +194,10 @@ class AddressPage extends Component
 
                         </thead>
                         {sorted.map((token) => (
-                            <TokenRow key={token.key} token={token} currency={currency}/>
+                            <TokenRow key={token.key} token={token}/>
                         ))}
-                        {tokens.noPrice.map((token, key) => (
-                            <TokenRowNoPrice key={key} token={token}/>
+                        {tokens.noPrice.map((token) => (
+                            <TokenRowNoPrice key={token.key} token={token}/>
                         ))}
                     </table>
                 </div>
