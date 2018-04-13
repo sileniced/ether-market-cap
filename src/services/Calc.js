@@ -52,9 +52,15 @@ class Calc
         const totalDiff = ((totalWorth / totalWorth24h) * 100) - 100;
         const totalDiff7d = ((totalWorth / totalWorth7d) * 100) - 100;
         const totalEth = totalWorth / eth_price;
+
         const total = { totalWorth, totalEth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d };
 
         return { total, hasPrice }
+    }
+
+    static balance (balance, decimals)
+    {
+        return balance / Math.pow(10, decimals)
     }
 }
 

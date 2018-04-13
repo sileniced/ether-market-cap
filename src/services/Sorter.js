@@ -1,3 +1,5 @@
+import Calc from "./Calc";
+
 class Sorter
 {
 
@@ -6,30 +8,35 @@ class Sorter
         let noPrice = [];
         let key = [];
 
+        const slugger = (symbol, slug) =>
+        {
+            return (key[symbol + slug] !== undefined)
+                ? slugger(symbol, (slug === undefined) ? 0 : ++slug)
+                : symbol + slug;
+        };
+
         tokens.map(token => {
 
             const { balance, tokenInfo } = token;
             const { price, decimals, symbol } = tokenInfo;
 
             token['sortable'] = {};
-            token['balance'] = balance / Math.pow(10, decimals);
+            token['balance'] = Calc.balance(balance, decimals);
             token['sortable']['balance'] = token.balance;
 
-            let keySlug = null;
-            while (key[symbol + keySlug] !== undefined) {
-                if (keySlug === null) keySlug = 0;
-                else keySlug++;
-            }
-            key[symbol + keySlug] = true;
-            token['key'] = symbol + keySlug;
+            token['key'] = slugger(symbol);
+            key[token.key] = true;
 
             if (price === false) {
                 noPrice.push(token);
             } else {
-                token['sortable']['diff'] = parseFloat(price.diff);
-                token['sortable']['diff7d'] = parseFloat(price.diff7d);
-                token['sortable']['rate'] = parseFloat(price.rate);
-                token['sortable']['marketCapUsd'] = parseInt(price.marketCapUsd, 10);
+
+                const { diff, diff7d, rate, marketCapUsd } = price;
+
+                token['sortable']['diff'] = parseFloat(diff);
+                token['sortable']['diff7d'] = parseFloat(diff7d);
+                token['sortable']['rate'] = parseFloat(rate);
+                token['sortable']['marketCapUsd'] = parseInt(marketCapUsd, 10);
 
                 hasPrice.push(token)
             }
