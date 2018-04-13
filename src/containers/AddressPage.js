@@ -32,8 +32,7 @@ class AddressPage extends Component
             tokens: [],
             order: 'worth',
             sorted: [],
-            sortedCache: {},
-            currency: {}
+            sortedCache: {}
         };
     }
 
@@ -76,15 +75,15 @@ class AddressPage extends Component
                     });
                     return null;
                 }
-                currency = {
+                Parser.setCurrency({
                     value: currency['USD_' + this.props.currency].val,
                     symbol: symbols[this.props.currency] || ''
-                };
+                });
             } else {
-                currency = {
+                Parser.setCurrency({
                     value: 1,
                     symbol: symbols['USD']
-                }
+                });
             }
 
 
@@ -111,8 +110,7 @@ class AddressPage extends Component
                 total,
                 tokens,
                 sorted,
-                sortedCache,
-                currency
+                sortedCache
             });
         };
 
@@ -149,11 +147,9 @@ class AddressPage extends Component
         const { error, isLoaded } = this.state;
         if (!error && isLoaded) {
 
-            const { total, sorted, tokens, currency } = this.state;
+            const { total, sorted, tokens } = this.state;
             const { totalWorth, totalEth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
             const co = (key) => () => this.setState(this.changeOrder(key));
-
-            Parser.setCurrency(currency);
 
             const c = {
                 na: 'header-name',

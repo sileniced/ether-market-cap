@@ -11,8 +11,6 @@ class HiddenRow extends Component
         const { rate24h, rate24h_diff, rate7d, rate7d_diff } = price;
         const { TotalCoinSupply } = cryptoCompare;
 
-        console.log(cryptoCompare);
-
         return (
             <tr>
                 <td colSpan={10}>
