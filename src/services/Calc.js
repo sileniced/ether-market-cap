@@ -1,6 +1,6 @@
 class Calc
 {
-    static initCalc(hasPrice)
+    static initCalc(hasPrice, eth_price)
     {
         let totalWorth = 0;
         let totalWorth24h = 0;
@@ -42,7 +42,8 @@ class Calc
 
         const totalDiff = ((totalWorth / totalWorth24h) * 100) - 100;
         const totalDiff7d = ((totalWorth / totalWorth7d) * 100) - 100;
-        const total = { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d };
+        const totalEth = totalWorth / eth_price;
+        const total = { totalWorth, totalEth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d };
 
         return { total, hasPrice }
     }

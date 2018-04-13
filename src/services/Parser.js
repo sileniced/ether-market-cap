@@ -36,6 +36,11 @@ class Parser
         return this.symbol + " " + parseFloat((worth * this.value).toFixed(2)).toLocaleString(undefined, {minimumFractionDigits: 2});
     }
 
+    static worthETH (worth)
+    {
+        return parseFloat(worth.toFixed(2)).toLocaleString(undefined, {minimumFractionDigits: 2}) + " ETH";
+    }
+
     static rate (rate)
     {
         return this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});

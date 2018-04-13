@@ -44,8 +44,10 @@ class AddressPage extends Component
             return [addressInfo.body, tokenInfo.body[0], allCoins.body.Data, this.hasCurreny ? currency.body : currency];
 
         };
+
         const getError = ([addressInfo, tokenInfo, allCoins, currency]) =>
             console.log([addressInfo, tokenInfo, allCoins, currency ]);
+
         const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) =>
         {
 
@@ -96,7 +98,7 @@ class AddressPage extends Component
 
             tokens = Sorter.placer(tokens);
 
-            const { total, hasPrice } = Calc.initCalc(tokens.hasPrice);
+            const { total, hasPrice } = Calc.initCalc(tokens.hasPrice, tokenInfo.price_usd);
 
             tokens['hasPrice'] = hasPrice;
 
@@ -148,7 +150,7 @@ class AddressPage extends Component
         if (!error && isLoaded) {
 
             const { total, sorted, tokens, currency } = this.state;
-            const { totalWorth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
+            const { totalWorth, totalEth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
             const co = (key) => () => this.setState(this.changeOrder(key));
 
             Parser.setCurrency(currency);
@@ -178,6 +180,7 @@ class AddressPage extends Component
                             <th className={c.wo} onClick={co('worth')}>
                                 <p>Worth</p>
                                 <p className={'extra-row'}>{Parser.worth(totalWorth)}</p>
+                                <p className={'extra-row diff-worth'}>{Parser.worthETH(totalEth)}</p>
                             </th>
                             <th className={c.di} onClick={co('diff')}>
                                 <p>24h</p>
