@@ -31,6 +31,11 @@ class Parser
         return balance.toLocaleString();
     }
 
+    static balanceDiff (balance)
+    {
+        return (balance > 0) ? 'gained' : 'lost';
+    }
+
     static worth (worth)
     {
         return this.symbol + " " + parseFloat((worth * this.value).toFixed(2)).toLocaleString(undefined, {minimumFractionDigits: 2});
@@ -43,7 +48,14 @@ class Parser
 
     static rate (rate)
     {
-        return this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
+        let sign = '';
+
+        if (rate < 0) {
+            rate = 0 - rate;
+            sign = '-';
+        }
+
+        return sign + this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
     }
 
     static marketCapUsd (marketCapUsd)

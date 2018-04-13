@@ -25,8 +25,6 @@ class TokenRow extends Component
         const { name, symbol, price } = tokenInfo;
         const { marketCapUsd, rate, diff, diff7d, share, worth, worth24h, worth7d } = price;
 
-        Parser.setCurrency(this.props.currency);
-
         return (
             <tbody>
             <tr className="table-body" onClick={this.toggleHidden.bind(this)} >

@@ -18,23 +18,32 @@ class Calc
 
             token['userShare'] = balance / TotalCoinSupply;
 
+
             return null;
         });
 
         hasPrice.forEach(token => {
 
             const { price } = token.tokenInfo;
-            const { worth } = price;
+            const { worth, rate } = price;
 
             price['share'] = (worth / totalWorth) * 100;
             token['sortable']['share'] = price.share;
 
             if (isNaN(price.diff)) price['diff'] = 0;
             price['worth24h'] = worth / (100 + price.diff) * 100;
+            price['rate24h'] = rate / (100 + price.diff) * 100;
+            price['rate24h_diff'] = price.rate - price.rate24h;
+            token['balance24h'] = price.worth24h / price.rate;
+            token['balance24h_diff'] = token.balance24h - token.balance;
             totalWorth24h += price.worth24h;
 
             if (isNaN(price.diff7d)) price['diff7d'] = 0;
             price['worth7d'] = worth / (100 + price.diff7d) * 100;
+            price['rate7d'] = rate / (100 + price.diff7d) * 100;
+            price['rate7d_diff'] = price.rate - price.rate7d;
+            token['balance7d'] = price.worth7d / price.rate;
+            token['balance7d_diff'] = token.balance7d - token.balance;
             totalWorth7d += price.worth7d;
 
             return null;
