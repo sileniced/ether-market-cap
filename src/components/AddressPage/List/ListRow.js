@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import Parser from '../../../services/Parser';
-import './TokenRow.css';
-import HiddenRow from './HiddenRow';
+import './ListRow.css';
+import ListHiddenRow from './ListHiddenRow';
 
-class TokenRow extends Component
+class ListRow extends Component
 {
 
     constructor () {
@@ -45,10 +45,10 @@ class TokenRow extends Component
                 </td>
                 <td className={"col-market text-right"}     >{Parser.marketCapUsd(marketCapUsd)}</td>
             </tr>
-            {!this.state.isHidden && <HiddenRow token={this.props.token}/>}
+            {!this.state.isHidden && <ListHiddenRow token={this.props.token}/>}
             </tbody>
         )
     }
 }
 
-export default TokenRow
+export default ListRow

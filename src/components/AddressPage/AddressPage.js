@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import ShowNav from "./ShowNav";
-import ShowList from "./List/ShowList";
+import List from "./List/List";
 
 import Parser from '../../services/Parser';
 import Sorter from '../../services/Sorter';
@@ -11,7 +11,7 @@ import * as Request from 'superagent'
 
 import { symbols } from '../../vendors/Currencies';
 import './AddressPage.css'
-import ShowSell from "./Sell/ShowSell";
+import Sell from "./Sell/Sell";
 
 class AddressPage extends Component
 {
@@ -163,8 +163,8 @@ class AddressPage extends Component
 
                     <div className={'address-page-container'}>
 
-                        {(this.state.show === 'list') && <ShowList list={forList} changeOrder={changeOrder} />}
-                        {(this.state.show === 'sell') && <ShowSell />}
+                        {(this.state.show === 'list') && <List list={forList} changeOrder={changeOrder} />}
+                        {(this.state.show === 'sell') && <Sell tokens={this.state.sorted} />}
 
                     </div>
                 </div>

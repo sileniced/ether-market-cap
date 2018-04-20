@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Parser from '../../../services/Parser';
-import './HiddenRow.css';
+import './ListHiddenRow.css';
 
-class HiddenRow extends Component
+class ListHiddenRow extends Component
 {
     render() {
 
@@ -89,4 +89,4 @@ class HiddenRow extends Component
     }
 }
 
-export default HiddenRow
+export default ListHiddenRow

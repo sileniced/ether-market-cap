@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import Parser from "../../../services/Parser";
 
-class TokenRowNoPrice extends PureComponent
+class ListNoPriceRow extends PureComponent
 {
     render() {
 
@@ -21,4 +21,4 @@ class TokenRowNoPrice extends PureComponent
     }
 }
 
-export default TokenRowNoPrice
+export default ListNoPriceRow

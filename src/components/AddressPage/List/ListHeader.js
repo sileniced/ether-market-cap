@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Parser from "../../../services/Parser";
 
-class TokenHeader extends Component
+class ListHeader extends Component
 {
     render() {
 
@@ -50,4 +50,4 @@ class TokenHeader extends Component
     }
 }
 
-export default TokenHeader
+export default ListHeader
