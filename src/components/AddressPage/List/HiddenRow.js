@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Parser from '../services/Parser';
+import Parser from '../../../services/Parser';
 import './HiddenRow.css';
 
 class HiddenRow extends Component

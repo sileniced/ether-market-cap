@@ -65,3 +65,7 @@ td, th, tbody {
     font-size: x-large;
     text-align: center;
 }
+
+#sell-proposal {
+    margin-bottom: 30px;
+}

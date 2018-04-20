@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 
-import TokenRow from '../components/TokenRow';
-import TokenRowNoPrice from "../components/TokenRowNoPrice";
-import Parser from '../services/Parser';
-import Sorter from '../services/Sorter';
-import Calc from "../services/Calc";
+import ShowNav from "./ShowNav";
+import ShowList from "./List/ShowList";
+
+import Parser from '../../services/Parser';
+import Sorter from '../../services/Sorter';
+import Calc from "../../services/Calc";
 
 import * as Request from 'superagent'
 
-import { symbols } from '../vendors/Currencies';
+import { symbols } from '../../vendors/Currencies';
 import './AddressPage.css'
 
 class AddressPage extends Component
@@ -32,7 +33,8 @@ class AddressPage extends Component
             tokens: [],
             order: 'worth',
             sorted: [],
-            sortedCache: {}
+            sortedCache: {},
+            show: 'list'
         };
     }
 
@@ -47,11 +49,18 @@ class AddressPage extends Component
         const getError = ([addressInfo, tokenInfo, allCoins, currency]) =>
             console.log([addressInfo, tokenInfo, allCoins, currency ]);
 
-        const parseResult = ([addressInfo, tokenInfo, allCoins, currency]) =>
-        {
+        const parseResult = this.parseData();
 
-            if (addressInfo.error !== undefined)
-            {
+        this.requests
+            .then(getBody)
+            .then(parseResult)
+            .catch(getError)
+    }
+
+    parseData() {
+        return ([addressInfo, tokenInfo, allCoins, currency]) => {
+
+            if (addressInfo.error !== undefined) {
                 this.setState({
                     isLoaded: true,
                     error: {
@@ -63,8 +72,7 @@ class AddressPage extends Component
             }
 
 
-            if (this.hasCurreny)
-            {
+            if (this.hasCurreny) {
                 if (Object.keys(currency).length === 0) {
                     this.setState({
                         isLoaded: true,
@@ -89,20 +97,19 @@ class AddressPage extends Component
 
             let tokens = (addressInfo.tokens).concat(Parser.ETH_asToken(addressInfo, tokenInfo));
 
-            tokens.forEach(token =>
-            {
+            tokens.forEach(token => {
                 token['cryptoCompare'] = allCoins[token.tokenInfo.symbol] || false;
                 return null;
             });
 
             tokens = Sorter.placer(tokens);
 
-            const { total, hasPrice } = Calc.initCalc(tokens.hasPrice, tokenInfo.price_usd);
+            const {total, hasPrice} = Calc.initCalc(tokens.hasPrice, tokenInfo.price_usd);
 
             tokens['hasPrice'] = hasPrice;
 
             const sorted = Sorter.sorter(tokens.hasPrice, 'worth');
-            const sortedCache = { worth: sorted };
+            const sortedCache = {worth: sorted};
 
             this.setState({
                 isLoaded: true,
@@ -113,11 +120,6 @@ class AddressPage extends Component
                 sortedCache
             });
         };
-
-        this.requests
-            .then(getBody)
-            .then(parseResult)
-            .catch(getError)
     }
 
     changeOrder = (order) => {
@@ -148,57 +150,22 @@ class AddressPage extends Component
         if (!error && isLoaded) {
 
             const { total, sorted, tokens } = this.state;
-            const { totalWorth, totalEth, totalWorth24h, totalWorth7d, totalDiff, totalDiff7d } = total;
-            const co = (key) => () => this.setState(this.changeOrder(key));
 
-            const c = {
-                na: 'header-name',
-                ba: 'header-balance text-right',
-                sh: 'header-share text-right',
-                ra: 'header-rate text-right',
-                wo: 'extra-worth text-right',
-                di: `extra-diff text-right ${Parser.diffColor(totalDiff)}`,
-                d7: `extra-diff7d ${Parser.diffColor(totalDiff7d)}`,
-                ma: 'header-market text-right'
-            };
+            const changeOrder = (order) => () => this.setState(this.changeOrder(order));
+            const changeShow = (show) => () => this.setState({show});
 
             return (
-                <div className="table-responsive">
-                    <table className="table">
-                        <thead>
+                <div>
 
-                        <tr className={'row-header'}>
-                            <th className={c.na} colSpan={2}>Token</th>
-                            <th className={c.ba} onClick={co('balance')}>Balance</th>
-                            <th                  onClick={co('balance')}/>
-                            <th className={c.sh} onClick={co('worth')}>Share</th>
-                            <th className={c.ra} onClick={co('rate')}>Rate</th>
-                            <th className={c.wo} onClick={co('worth')}>
-                                <p>Worth</p>
-                                <p className={'extra-row'}>{Parser.worth(totalWorth)}</p>
-                                <p className={'extra-row diff-worth'}>{Parser.worthETH(totalEth)}</p>
-                            </th>
-                            <th className={c.di} onClick={co('diff')}>
-                                <p>24h</p>
-                                <p className={'extra-row'}>{Parser.diff(totalDiff)}</p>
-                                <p className={'extra-row diff-worth'}>{Parser.worth(totalWorth24h)}</p>
-                            </th>
-                            <th className={c.d7} onClick={co('diff7d')}>
-                                <p>7d</p>
-                                <p className={'extra-row'}>{Parser.diff(totalDiff7d)}</p>
-                                <p className={'extra-row diff-worth'}>{Parser.worth(totalWorth7d)}</p>
-                            </th>
-                            <th className={c.ma} onClick={co('marketCapUsd')}>Market Cap</th>
-                        </tr>
+                    <ShowNav show={this.state.show} changeShow={changeShow} />
 
-                        </thead>
-                        {sorted.map((token) => (
-                            <TokenRow key={token.key} token={token}/>
-                        ))}
-                        {tokens.noPrice.map((token) => (
-                            <TokenRowNoPrice key={token.key} token={token}/>
-                        ))}
-                    </table>
+                    <div className={'address-page-container'}>
+                        <div className="table-responsive">
+
+                            {(this.state.show === 'list') && <ShowList total={total} changeOrder={changeOrder} sorted={sorted} tokens={tokens} />}
+
+                        </div>
+                    </div>
                 </div>
             );
         } else {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import LandingsPage from '../components/LandingsPage';
-import AddressPage from '../containers/AddressPage';
+import LandingsPage from './Landing/LandingsPage';
+import AddressPage from './AddressPage/AddressPage';
 
 class Page extends Component
 {
@@ -19,9 +19,7 @@ class Page extends Component
                 <div className={'container'}>
                     <h1 className={'display-4 title'}>Address Page</h1>
                     <p className={'under-title'}>{address}</p>
-                    <div className={'address-page-container'}>
-                        <AddressPage address={address} currency={currency} />
-                    </div>
+                    <AddressPage address={address} currency={currency} />
                     <footer className={'footer'}>
                         made with:
                         <a href={'https://ethplorer.io'}>ethplorer</a>

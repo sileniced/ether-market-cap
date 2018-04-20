@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import Parser from "../services/Parser";
+import Parser from "../../../services/Parser";
 
 class TokenRowNoPrice extends PureComponent
 {
