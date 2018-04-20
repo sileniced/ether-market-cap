@@ -162,12 +162,10 @@ class AddressPage extends Component
                     <ShowNav show={this.state.show} changeShow={changeShow} />
 
                     <div className={'address-page-container'}>
-                        <div className="table-responsive">
 
-                            {(this.state.show === 'list') && <ShowList list={forList} changeOrder={changeOrder} />}
-                            {(this.state.show === 'sell') && <ShowSell />}
+                        {(this.state.show === 'list') && <ShowList list={forList} changeOrder={changeOrder} />}
+                        {(this.state.show === 'sell') && <ShowSell />}
 
-                        </div>
                     </div>
                 </div>
             );

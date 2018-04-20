@@ -12,11 +12,13 @@ class ShowList extends Component
         const { total, sorted, tokens } = list;
 
         return (
-            <table className="table">
-                <TokenHeader total={total} changeOrder={changeOrder} />
-                {sorted.map((token) => <TokenRow key={token.key} token={token}/>)}
-                {tokens.noPrice.map((token) => <TokenRowNoPrice key={token.key} token={token}/>)}
-            </table>
+            <div className="table-responsive">
+                <table className="table">
+                    <TokenHeader total={total} changeOrder={changeOrder} />
+                    {sorted.map((token) => <TokenRow key={token.key} token={token}/>)}
+                    {tokens.noPrice.map((token) => <TokenRowNoPrice key={token.key} token={token}/>)}
+                </table>
+            </div>
         )
     }
 }

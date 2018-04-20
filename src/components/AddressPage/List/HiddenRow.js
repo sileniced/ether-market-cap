@@ -53,9 +53,9 @@ class HiddenRow extends Component
                                         <tbody>
                                         <tr>
                                             <td>{Parser.rate(rate24h)}</td>
-                                            <td>{Parser.rate(rate24h_diff)}</td>
+                                            <td>{Parser.rateDiff(rate24h_diff)}</td>
                                             <td>{Parser.rate(rate7d)}</td>
-                                            <td>{Parser.rate(rate7d_diff)}</td>
+                                            <td>{Parser.rateDiff(rate7d_diff)}</td>
                                         </tr>
                                         </tbody>
                                         <thead>
@@ -64,17 +64,17 @@ class HiddenRow extends Component
                                         </tr>
                                         <tr className={'hidr-whatif-bottom-header'}>
                                             <th>24h</th>
-                                            <th>{Parser.balanceDiff(balance24h_diff)}</th>
+                                            <th>{Parser.balanceDiffStr(balance24h_diff)}</th>
                                             <th>7d</th>
-                                            <th>{Parser.balanceDiff(balance7d_diff)}</th>
+                                            <th>{Parser.balanceDiffStr(balance7d_diff)}</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr>
                                             <td>{Parser.balance(balance24h)} {symbol}</td>
-                                            <td>{Parser.balance(balance24h_diff)} {symbol}</td>
+                                            <td>{Parser.balanceDiff(balance24h_diff)} {symbol}</td>
                                             <td>{Parser.balance(balance7d)} {symbol}</td>
-                                            <td>{Parser.balance(balance7d_diff)} {symbol}</td>
+                                            <td>{Parser.balanceDiff(balance7d_diff)} {symbol}</td>
                                         </tr>
                                         </tbody>
                                     </table>

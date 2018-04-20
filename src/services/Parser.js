@@ -10,6 +10,11 @@ class Parser
         this.symbol = currency.symbol;
     }
 
+    static getSymbol ()
+    {
+        return this.symbol;
+    }
+
     static logo (cryptoCompare, location)
     {
         const size = location === 'hidden-row' ? 40 : 20;
@@ -33,6 +38,18 @@ class Parser
 
     static balanceDiff (balance)
     {
+        let sign = '+ ';
+
+        if (balance < 0) {
+            balance = 0 - balance;
+            sign = '- ';
+        }
+
+        return sign + Parser.balance(balance);
+    }
+
+    static balanceDiffStr (balance)
+    {
         return (balance > 0) ? 'gained' : 'lost';
     }
 
@@ -48,14 +65,19 @@ class Parser
 
     static rate (rate)
     {
-        let sign = '';
+        return this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
+    }
+
+    static rateDiff (rate)
+    {
+        let sign = '+ ';
 
         if (rate < 0) {
             rate = 0 - rate;
-            sign = '-';
+            sign = '- ';
         }
 
-        return sign + this.symbol + " " + (parseFloat(rate) * this.value).toLocaleString(undefined, {minimumFractionDigits: 4, maximumFractionDigits: 4});
+        return sign + Parser.rate(rate);
     }
 
     static marketCapUsd (marketCapUsd)

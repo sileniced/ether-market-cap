@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
+import './ShowSell.css';
 
 class ShowSell extends Component
 {
     render () {
         return (
-            <table className="table">
+            <div>
+                <div id={'sell-form'}>
+                    <form>
+                        <div className="form-group">
+                            <label htmlFor="exampleInputEmail1">Amount</label>
+                            <input type="text" className="form-control" id="sell-form-amount" placeholder="Enter amount" />
+                        </div>
+                    </form>
+                </div>
+                <table className="table">
 
-            </table>
+                </table>
+            </div>
         )
     }
 }
