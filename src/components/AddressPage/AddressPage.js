@@ -11,6 +11,7 @@ import * as Request from 'superagent'
 
 import { symbols } from '../../vendors/Currencies';
 import './AddressPage.css'
+import ShowSell from "./Sell/ShowSell";
 
 class AddressPage extends Component
 {
@@ -150,6 +151,7 @@ class AddressPage extends Component
         if (!error && isLoaded) {
 
             const { total, sorted, tokens } = this.state;
+            const forList = { total, sorted, tokens };
 
             const changeOrder = (order) => () => this.setState(this.changeOrder(order));
             const changeShow = (show) => () => this.setState({show});
@@ -162,7 +164,8 @@ class AddressPage extends Component
                     <div className={'address-page-container'}>
                         <div className="table-responsive">
 
-                            {(this.state.show === 'list') && <ShowList total={total} changeOrder={changeOrder} sorted={sorted} tokens={tokens} />}
+                            {(this.state.show === 'list') && <ShowList list={forList} changeOrder={changeOrder} />}
+                            {(this.state.show === 'sell') && <ShowSell />}
 
                         </div>
                     </div>

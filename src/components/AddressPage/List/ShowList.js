@@ -8,7 +8,9 @@ class ShowList extends Component
 {
     render ()
     {
-        const { total, changeOrder, sorted, tokens } = this.props;
+        const {  changeOrder, list } = this.props;
+        const { total, sorted, tokens } = list;
+
         return (
             <table className="table">
                 <TokenHeader total={total} changeOrder={changeOrder} />
