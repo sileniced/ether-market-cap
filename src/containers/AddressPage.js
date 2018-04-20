@@ -170,7 +170,7 @@ class AddressPage extends Component
                         <tr className={'row-header'}>
                             <th className={c.na} colSpan={2}>Token</th>
                             <th className={c.ba} onClick={co('balance')}>Balance</th>
-                            <th onClick={co('balance')}/>
+                            <th                  onClick={co('balance')}/>
                             <th className={c.sh} onClick={co('worth')}>Share</th>
                             <th className={c.ra} onClick={co('rate')}>Rate</th>
                             <th className={c.wo} onClick={co('worth')}>
