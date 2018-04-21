@@ -1,3 +1,10 @@
 #sell-form {
     padding: 20px;
 }
+
+.sell-row-checkbox {
+    width: 12px;
+    padding-right: 0 !important;
+    text-align: center; /* center checkbox horizontally */
+    vertical-align: middle; /* center checkbox vertically */
+}

@@ -6,7 +6,7 @@ class SellForm extends Component
     render()
     {
 
-        const onAmountChange = this.props.onAmountChange;
+        const { onAmountChange } = this.props;
 
         return (
             <div id={'sell-form'}>

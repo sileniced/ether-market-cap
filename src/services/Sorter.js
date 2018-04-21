@@ -12,7 +12,7 @@ class Sorter
         {
             return (key[symbol + slug] !== undefined)
                 ? slugger(symbol, (slug === undefined) ? 0 : ++slug)
-                : symbol + slug;
+                : symbol + ((slug === undefined) ? '' : slug);
         };
 
         tokens.map(token => {

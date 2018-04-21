@@ -5,9 +5,9 @@ class ShowNav extends Component
     render()
     {
 
-        const changeShow = this.props.changeShow;
-        const showButtonClass = (show) => {
-            return 'nav-link btn btn-link' + ((show === this.props.show) && ' disabled');
+        const { changeShow, show } = this.props;
+        const showButtonClass = (showClass) => {
+            return ((showClass === show) ? 'nav-active' : 'nav-show') + ' nav-link btn btn-link';
         };
 
         return (

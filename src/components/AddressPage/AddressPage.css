@@ -69,3 +69,12 @@ td, th, tbody {
 #sell-proposal {
     margin-bottom: 30px;
 }
+
+.nav-active {
+    color: black !important;
+    background-color: whitesmoke !important;
+}
+
+.nav-show {
+    color: gray !important;
+}

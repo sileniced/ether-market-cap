@@ -15,6 +15,11 @@ class Parser
         return this.symbol;
     }
 
+    static getValue ()
+    {
+        return this.value;
+    }
+
     static logo (cryptoCompare, location)
     {
         const size = location === 'hidden-row' ? 40 : 20;
