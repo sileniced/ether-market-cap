@@ -13,8 +13,8 @@ class Sell extends Component
         super(props);
 
         this.state = {
-            sellAmount: 0,
             tokens: props.tokens,
+            sellAmount: 0,
             checkedTokens: 0
         }
     }

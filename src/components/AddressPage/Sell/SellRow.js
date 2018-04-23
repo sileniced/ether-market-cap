@@ -5,9 +5,9 @@ class SellRow extends Component
 {
 
 
-    constructor() {
+    constructor(props) {
 
-        super();
+        super(props);
 
         this.state = {
             isChecked: false
@@ -17,7 +17,7 @@ class SellRow extends Component
     render ()
     {
         const { token, onCheckboxChange, sellAmount } = this.props;
-        const { balance, tokenInfo, cryptoCompare, key } = token;
+        const { balance, tokenInfo, cryptoCompare } = token;
         const { name, symbol, price } = tokenInfo;
         const { worth, rate } = price;
 
@@ -26,11 +26,16 @@ class SellRow extends Component
         const onThisCheckboxChange = () => {
             onCheckboxChange(!isChecked);
             this.setState({isChecked: !isChecked});
+
+            if (rate < sellAmount) {
+
+            }
+
         };
 
         return (
-            <tr>
-                <td className="sell-row-checkbox"           ><input type="checkbox" value={key} onChange={onThisCheckboxChange}/></td>
+            <tr onClick={onThisCheckboxChange}>
+                <td className="sell-row-checkbox"           ><input type="checkbox" onChange={onThisCheckboxChange} checked={isChecked} /></td>
                 <td className={"col-logo"}                  >{Parser.logo(cryptoCompare)}</td>
                 <td className={"col-name"}                  >{Parser.name(name)}</td>
                 <td className={"col-balance text-right"}    >{Parser.balance(balance)}</td>

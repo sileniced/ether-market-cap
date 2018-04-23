@@ -145,8 +145,6 @@ class AddressPage extends Component
 
     render() {
 
-        // console.log(this.state)
-
         const { error, isLoaded } = this.state;
         if (!error && isLoaded) {
 
@@ -164,7 +162,7 @@ class AddressPage extends Component
                     <div className={'address-page-container'}>
 
                         {(this.state.show === 'list') && <List list={forList} changeOrder={changeOrder} />}
-                        {(this.state.show === 'sell') && <Sell tokens={this.state.sorted} />}
+                        {(this.state.show === 'sell') && <Sell tokens={sorted} />}
 
                     </div>
                 </div>
