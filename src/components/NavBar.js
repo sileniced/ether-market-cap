@@ -21,7 +21,7 @@ class NavBar extends Component
 
         const GithubRibbon = () => (
             <a href="https://github.com/sileniced/ether-market-cap">
-                <img className={'github-ribbon'} src={'forkme_right_darkblue_121621.png'} alt="Fork me on GitHub" />
+                <img className={'./github-ribbon'} src={'forkme_right_darkblue_121621.png'} alt="Fork me on GitHub" />
             </a>
         );
 
