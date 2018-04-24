@@ -34,8 +34,8 @@ class SellRow extends Component
         };
 
         return (
-            <tr onClick={onThisCheckboxChange}>
-                <td className="sell-row-checkbox"           ><input type="checkbox" onChange={onThisCheckboxChange} checked={isChecked} /></td>
+            <tr className={'sell-row'} onClick={onThisCheckboxChange}>
+                <td className={"sell-row-checkbox"}           ><input type="checkbox" onChange={onThisCheckboxChange} checked={isChecked} /></td>
                 <td className={"col-logo"}                  >{Parser.logo(cryptoCompare)}</td>
                 <td className={"col-name"}                  >{Parser.name(name)}</td>
                 <td className={"col-balance text-right"}    >{Parser.balance(balance)}</td>

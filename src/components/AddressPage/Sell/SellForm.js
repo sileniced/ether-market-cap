@@ -3,10 +3,10 @@ import Parser from "../../../services/Parser";
 
 class SellForm extends Component
 {
+
     render()
     {
-
-        const { onAmountChange } = this.props;
+        const { onAmountChange} = this.props;
 
         return (
             <div id={'sell-form'}>
@@ -19,7 +19,7 @@ class SellForm extends Component
                             className="form-control"
                             id="sell-form-amount"
                             placeholder="Enter amount"
-                            onChange={e => onAmountChange(e.target.value)}
+                            onChange={onAmountChange}
                         />
                     </div>
                 </form>

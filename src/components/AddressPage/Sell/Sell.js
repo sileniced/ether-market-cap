@@ -22,8 +22,10 @@ class Sell extends Component
     render () {
 
         const { tokens, sellAmount, checkedTokens } = this.state;
+        const { totalWorth } = this.props.total;
 
-        const onAmountChange = (val) => this.setState({sellAmount: val / Parser.getValue()});
+        const onAmountChange = (e) => this.setState({sellAmount: e.target.value / Parser.getValue()});
+
         const onCheckboxChange = (isChecked) => this.setState({checkedTokens: ((isChecked) ? (checkedTokens + 1) : (checkedTokens - 1))});
 
         return (
@@ -31,7 +33,7 @@ class Sell extends Component
                 <SellForm onAmountChange={onAmountChange}/>
                 <div className="table-responsive">
                     <table className="table">
-                        <SellHeader />
+                        <SellHeader totalWorth={totalWorth} />
                         <tbody>
                         {tokens.map((token) => <SellRow
                             key={token.key}

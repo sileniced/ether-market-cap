@@ -8,3 +8,7 @@
     text-align: center; /* center checkbox horizontally */
     vertical-align: middle; /* center checkbox vertically */
 }
+
+.sell-row:hover td {
+    background-color: rgb(222, 226, 230);
+}
